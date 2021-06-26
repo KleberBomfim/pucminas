@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pucminas-dev-224400-authRole",
+      "UnauthRoleArn": "arn:aws:iam::356362748193:role/amplify-pucminas-dev-224400-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::356362748193:role/amplify-pucminas-dev-224400-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-pucminas-dev-224400-deployment",
+      "UnauthRoleName": "amplify-pucminas-dev-224400-unauthRole",
+      "StackName": "amplify-pucminas-dev-224400",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:356362748193:stack/amplify-pucminas-dev-224400/91f21280-d684-11eb-96bd-0aba335c2f57",
+      "AmplifyAppId": "dxfjeyyzze9wz"
+    },
+    "categories": {
+      "auth": {
+        "pucminas559b572d": {}
+      }
+    }
+  }
+}
