@@ -1,0 +1,75 @@
+type Receptionist @model @auth(rules: [{allow: groups, groups: ["Receptionists"], operations: [read, update, delete, create]}, {allow: groups, groups: ["Doctors"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  name: String!
+  email: AWSEmail!
+  phone: AWSPhone
+}
+
+type Patient @model @auth(rules: [{allow: groups, groups: ["Patients"], operations: [read]}]) {
+  id: ID!
+  name: String!
+  phon: AWSPhone!
+  email: AWSEmail!
+  AppointmentsPatient: [Appointment] @connection(keyName: "byPatient", fields: ["id"])
+}
+
+type Doctor @model @auth(rules: [{allow: groups, groups: ["Doctors"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Receptionists"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Patients"], operations: [read]}]) {
+  id: ID!
+  name: String!
+  email: AWSEmail!
+  phone: AWSEmail!
+  CRM: String!
+  schedule: [Schedule]
+  AppointmentsDoctor: [Appointment] @connection(keyName: "byDoctor", fields: ["id"])
+}
+
+type Schedule {
+  status: ScheduleStatus!
+  date: AWSDate!
+  time: AWSTime!
+}
+
+type Exam @model @key(name: "byAppointment", fields: ["appointmentID"]) @auth(rules: [{allow: groups, groups: ["Doctors"], operations: [read, update, delete, create]}, {allow: groups, groups: ["Receptionists"], operations: [read, create, delete, update]}, {allow: groups, groups: ["Patients"], operations: [read]}]) {
+  id: ID!
+  name: String!
+  description: String
+  appointmentID: ID
+}
+
+enum Status {
+  BOOKED
+  PENDING
+  DONE
+}
+
+type Appointment @model @key(name: "byPatient", fields: ["patientID"]) @key(name: "byDoctor", fields: ["doctorID"]) @auth(rules: [{allow: groups, groups: ["Receptionists"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Doctors"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Patients"], operations: [read]}]) {
+  id: ID!
+  created: AWSTimestamp
+  date: AWSDateTime
+  statu: Status
+  doctorID: ID
+  patientID: ID
+  Prescriptions: [Prescription] @connection(keyName: "byAppointment", fields: ["id"])
+  Exams: [Exam] @connection(keyName: "byAppointment", fields: ["id"])
+}
+
+type Prescription @model @key(name: "byAppointment", fields: ["appointmentID"]) @auth(rules: [{allow: groups, groups: ["Patients"], operations: [read]}, {allow: groups, groups: ["Doctors"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Receptionists"], operations: [read]}]) {
+  id: ID!
+  drug: [DRUG!]
+  expedited: AWSTimestamp
+  coments: String
+  appointmentID: ID
+}
+
+type DRUG {
+  id: String
+  name: String!
+  generic: String!
+  manufacturer: String!
+}
+
+enum ScheduleStatus {
+  OPEN
+  CLOSED
+}
+ 
